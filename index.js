@@ -10,7 +10,7 @@ const promptlist = [{
         name: 'inputFileName',
         validate: val => {
             if (!fs.existsSync(val)) {
-                return `不存在文件${path.resolve(__dirname, val)}`
+                return `不存在文件${path.resolve(process.cwd(), val)}`
             }
 
             if (path.extname(val) == '.xlsx') {
@@ -39,7 +39,7 @@ const promptlist = [{
         name: 'dictionarires',
         validate: val => {
             if (!fs.existsSync(val)) {
-                return `不存在文件${path.resolve(__dirname, val)}`
+                return `不存在文件${path.resolve(process.cwd(), val)}`
             }
             if (path.extname(val) == '.json') {
                 return true
@@ -71,9 +71,9 @@ const promptlist = [{
 
 ]
 inquirer.prompt(promptlist).then(answers => {
-    let workbook = xlsx.readFile(path.resolve(__dirname, answers.inputFileName));
+    let workbook = xlsx.readFile(path.resolve(process.cwd(), answers.inputFileName));
     let sheetNames = workbook.SheetNames;
-    var datajson = fs.readFileSync(path.resolve(__dirname, answers.dictionarires), 'utf8');
+    var datajson = fs.readFileSync(path.resolve(process.cwd(), answers.dictionarires), 'utf8');
     var dictionary = JSON.parse(datajson).dictionary
     var keyArr = [];
     for (var i in dictionary) {
@@ -124,9 +124,9 @@ inquirer.prompt(promptlist).then(answers => {
     } else {
         res = dataArr
     }
-    fs.writeFile(path.resolve(__dirname, `${answers.outputName}.json`), JSON.stringify(res), (err) => {
+    fs.writeFile(path.resolve(process.cwd(), `${answers.outputName}.json`), JSON.stringify(res), (err) => {
         if (err) throw err;
-        console.log(chalk.green('转换成功，输出地址：', path.resolve(__dirname, `${answers.outputName}.json`)));
+        console.log(chalk.green('转换成功，输出地址：', path.resolve(process.cwd(), `${answers.outputName}.json`)));
     });
 
 })
