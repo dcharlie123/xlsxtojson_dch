@@ -1,0 +1,27 @@
+{
+  "name": "xlsxtojson_dch",
+  "version": "1.0.2",
+  "description": "xlsxtojson",
+  "main": "index.js",
+  "scripts": {
+    "xlsxtojson_dch": "xlsxtojson_dch"
+  },
+  "keywords": [
+    "cli",
+    "xlsxtojson"
+  ],
+  "author": "dcharlie123",
+  "license": "ISC",
+  "bin": {
+    "xlsxtojson_dch": "index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/dcharlie123/xlsxtojson_dch/issues"
+  },
+  "homepage": "https://github.com/dcharlie123/xlsxtojson_dch#readme",
+  "dependencies": {
+    "chalk.js": "^0.0.5",
+    "inquirer": "^7.1.0",
+    "xlsx": "^0.15.6"
+  }
+}
