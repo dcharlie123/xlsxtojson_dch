@@ -35,4 +35,4 @@ want to output：
     }
 }
 ```
-- 在命令行输入 xlsxtojson_dch，按提示操作即可
+- 在需要转的xlsx文件所在文件夹下运行命令行输入 xlsxtojson_dch，按提示操作即可
