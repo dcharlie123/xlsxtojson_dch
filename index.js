@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 const fs = require("fs");
 const path = require('path');
 const xlsx = require('xlsx');
@@ -34,9 +35,17 @@ const promptlist = [{
         }
     },
     {
+        type: "confirm",
+        message: "是否需要自定义输出配置",
+        name: "isNeedConfig"
+    },
+    {
         type: 'input',
         message: '输出配置对应的文件路径(json格式，格式见readme.md)',
         name: 'dictionarires',
+        when: function (answers) { // 当watch为true的时候才会提问当前问题
+            return answers.isNeedConfig
+        },
         validate: val => {
             if (!fs.existsSync(val)) {
                 return `不存在文件${path.resolve(process.cwd(), val)}`
@@ -73,28 +82,38 @@ const promptlist = [{
 inquirer.prompt(promptlist).then(answers => {
     let workbook = xlsx.readFile(path.resolve(process.cwd(), answers.inputFileName));
     let sheetNames = workbook.SheetNames;
-    var datajson = fs.readFileSync(path.resolve(process.cwd(), answers.dictionarires), 'utf8');
-    var dictionary = JSON.parse(datajson).dictionary
-    var keyArr = [];
-    for (var i in dictionary) {
-        keyArr.push(i)
+    let sheetName_field="sheetName"
+    if (answers.isNeedConfig && answers.dictionarires) {
+        var datajson = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), answers.dictionarires)), 'utf8');
+        var dictionary = datajson.dictionary;
+        var keyArr = [];
+        for (var i in dictionary) {
+            keyArr.push(i)
+        }
+        sheetName_field=datajson.sheetName_field
     }
+
+
     let dataArr = [];
     if (answers.sheetNum == 'all') {
         sheetNames.forEach((sheetName, idx) => {
             let worksheet = workbook.Sheets[sheetNames[idx]];
             let hrefs = xlsx.utils.sheet_to_json(worksheet);
             let arr = [];
+            if (answers.isNeedConfig && answers.dictionarires) {
+                hrefs.forEach((item) => {
+                    let obj = {};
+                    for (let i = 0; i < keyArr.length; i++) {
+                        obj[dictionary[keyArr[i]]] = item[keyArr[i]]
+                    }
+                    arr.push(obj)
+                })
+            } else {
+                arr = hrefs
+            }
 
-            hrefs.forEach((item) => {
-                let obj = {};
-                for (let i = 0; i < keyArr.length; i++) {
-                    obj[dictionary[keyArr[i]]] = item[keyArr[i]]
-                }
-                arr.push(obj)
-            })
             dataArr.push({
-                date: sheetName,
+                [sheetName_field]: sheetName,
                 data: arr
             })
         })
@@ -102,15 +121,19 @@ inquirer.prompt(promptlist).then(answers => {
         var worksheet = workbook.Sheets[sheetNames[answers.sheetNum - 1]];
         var hrefs = xlsx.utils.sheet_to_json(worksheet);
         let arr = [];
-        hrefs.forEach((item) => {
-            let obj = {};
-            for (let i = 0; i < keyArr.length; i++) {
-                obj[dictionary[keyArr[i]]] = item[keyArr[i]]
-            }
-            arr.push(obj)
-        })
+        if (answers.isNeedConfig && answers.dictionarires) {
+            hrefs.forEach((item) => {
+                let obj = {};
+                for (let i = 0; i < keyArr.length; i++) {
+                    obj[dictionary[keyArr[i]]] = item[keyArr[i]]
+                }
+                arr.push(obj)
+            })
+        } else {
+            arr = hrefs
+        }
         dataArr = {
-            date: sheetNames[answers.sheetNum - 1],
+            [sheetName_field]: sheetNames[answers.sheetNum - 1],
             data: arr
         }
     }
