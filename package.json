@@ -1,10 +1,11 @@
 {
   "name": "xlsxtojson_dch",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "xlsxtojson",
   "main": "index.js",
   "scripts": {
-    "xlsxtojson_dch": "xlsxtojson_dch"
+    "xlsxtojson_dch": "xlsxtojson_dch",
+    "release": "standard-version"
   },
   "keywords": [
     "cli",
@@ -22,6 +23,10 @@
   "dependencies": {
     "chalk.js": "^0.0.5",
     "inquirer": "^7.1.0",
-    "xlsx": "^0.15.6"
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "eslint": "^8.16.0",
+    "standard-version": "^9.5.0"
   }
 }
