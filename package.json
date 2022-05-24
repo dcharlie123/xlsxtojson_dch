@@ -16,6 +16,10 @@
   "bin": {
     "xlsxtojson_dch": "index.js"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "bugs": {
     "url": "https://github.com/dcharlie123/xlsxtojson_dch/issues"
   },
