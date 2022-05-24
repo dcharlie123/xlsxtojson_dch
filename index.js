@@ -14,7 +14,7 @@ const promptlist = [{
             return `不存在文件${path.resolve(process.cwd(), val)}`
         }
 
-        if (path.extname(val) == '.xlsx') {
+        if (path.extname(val) == '.xlsx' || path.extname(val) == '.xls') {
             return true
         }
 
