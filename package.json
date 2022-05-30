@@ -9,7 +9,8 @@
   },
   "keywords": [
     "cli",
-    "xlsxtojson"
+    "xlsxtojson",
+    "xlsxtojson_dch"
   ],
   "author": "dcharlie123",
   "license": "ISC",
